@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,12 +9,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using samsung.sedac.alligatormanagerproject.Api.Contexto;
 using samsung.sedac.alligatormanagerproject.Api.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace samsung.sedac.alligatormanagerproject.Api
@@ -53,6 +56,19 @@ namespace samsung.sedac.alligatormanagerproject.Api
              .AddSignInManager<SignInManager<Users>>()
              .AddDefaultTokenProviders();
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddJwtBearer(options =>
+               {
+                   options.TokenValidationParameters = new TokenValidationParameters
+                   {
+                       ValidateIssuerSigningKey = true,
+                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
+                       .GetBytes(Configuration.GetSection("AppSettins:Token").Value)),
+                       ValidateIssuer = false,
+                       ValidateAudience = false
+                   };
+               });
+
             services.AddAuthentication();
              
             services.AddControllers()
@@ -60,8 +76,8 @@ namespace samsung.sedac.alligatormanagerproject.Api
                 {
                     opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
-               
 
+            services.AddCors();
 
 
 
@@ -80,6 +96,8 @@ namespace samsung.sedac.alligatormanagerproject.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "samsung.sedac.alligatormanagerproject.Api v1"));
             }
+
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); //Esta linha é para trabalhar com o as View _ Seja Angulaar, React etc
 
             app.UseHttpsRedirection();
 
