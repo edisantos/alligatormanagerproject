@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using samsung.sedac.alligatormanagerproject.Api.AutoMapperHelps;
 using samsung.sedac.alligatormanagerproject.Api.Contexto;
 using samsung.sedac.alligatormanagerproject.Api.Entities;
 using System;
@@ -40,7 +42,7 @@ namespace samsung.sedac.alligatormanagerproject.Api
 
             services.AddIdentity<Users, Role>(options =>
             {
-                options.SignIn.RequireConfirmedEmail = true;
+               // options.SignIn.RequireConfirmedEmail = true;
                 options.Password.RequireDigit = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireLowercase = false;
@@ -63,7 +65,7 @@ namespace samsung.sedac.alligatormanagerproject.Api
                    {
                        ValidateIssuerSigningKey = true,
                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
-                       .GetBytes(Configuration.GetSection("AppSettins:Token").Value)),
+                       .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
                        ValidateIssuer = false,
                        ValidateAudience = false
                    };
@@ -77,6 +79,12 @@ namespace samsung.sedac.alligatormanagerproject.Api
                     opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
 
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutoMapperProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
             services.AddCors();
 
 

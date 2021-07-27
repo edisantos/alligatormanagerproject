@@ -64,3 +64,8 @@ E:\02-Projetos\03.Core\4.AlligatorManagerProject\samsung.sedac.alligatormanagerp
 E:\02-Projetos\03.Core\4.AlligatorManagerProject\samsung.sedac.alligatormanagerproject\samsung.sedac.alligatormanagerproject.Api\obj\Debug\net5.0\ref\samsung.sedac.alligatormanagerproject.Api.dll
 E:\02-Projetos\03.Core\4.AlligatorManagerProject\samsung.sedac.alligatormanagerproject\samsung.sedac.alligatormanagerproject.Api\obj\Debug\net5.0\samsung.sedac.alligatormanagerproject.Api.pdb
 E:\02-Projetos\03.Core\4.AlligatorManagerProject\samsung.sedac.alligatormanagerproject\samsung.sedac.alligatormanagerproject.Api\obj\Debug\net5.0\samsung.sedac.alligatormanagerproject.Api.genruntimeconfig.cache
+E:\02-Projetos\03.Core\4.AlligatorManagerProject\samsung.sedac.alligatormanagerproject\samsung.sedac.alligatormanagerproject.Api\bin\Debug\net5.0\AutoMapper.dll
+E:\02-Projetos\03.Core\4.AlligatorManagerProject\samsung.sedac.alligatormanagerproject\samsung.sedac.alligatormanagerproject.Api\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+E:\02-Projetos\03.Core\4.AlligatorManagerProject\samsung.sedac.alligatormanagerproject\samsung.sedac.alligatormanagerproject.Api\bin\Debug\net5.0\Microsoft.AspNetCore.JsonPatch.dll
+E:\02-Projetos\03.Core\4.AlligatorManagerProject\samsung.sedac.alligatormanagerproject\samsung.sedac.alligatormanagerproject.Api\bin\Debug\net5.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+E:\02-Projetos\03.Core\4.AlligatorManagerProject\samsung.sedac.alligatormanagerproject\samsung.sedac.alligatormanagerproject.Api\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll

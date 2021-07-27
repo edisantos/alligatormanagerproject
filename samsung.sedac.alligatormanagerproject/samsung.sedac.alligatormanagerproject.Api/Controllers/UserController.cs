@@ -41,20 +41,15 @@ namespace samsung.sedac.alligatormanagerproject.Api.Controllers
         }
         // GET: api/<UserController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(new UserDto());
         }
 
-        // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+            
 
         // POST api/<UserController>
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register(UserDto model)
         {
             try
@@ -79,10 +74,12 @@ namespace samsung.sedac.alligatormanagerproject.Api.Controllers
                         //var token = await _userManger.GenerateEmailConfirmationTokenAsync(user);
                         var appUser = await _userManger.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == user.UserName.ToUpper());
                         var token = GenerateJWTToken(appUser).Result;
-                        var confirmationEmail = Url.Action("ComfirmEmailAddress", "Home",
-                            new { token = token, email = user.Email }, Request.Scheme);
+                        //var confirmationEmail = Url.Action("ComfirmEmailAddress", "Home",
+                        //    new { token = token, email = user.Email }, Request.Scheme);
 
-                        System.IO.File.WriteAllText("confirmationEmail.text", confirmationEmail);
+                        //System.IO.File.WriteAllText("confirmationEmail.text", confirmationEmail);
+
+                        return Ok(token);
                     }
                    
                 }
@@ -95,6 +92,35 @@ namespace samsung.sedac.alligatormanagerproject.Api.Controllers
             }
                
             
+        }
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginUserDto userLogin)
+        {
+            try
+            {
+                var user = await _userManger.FindByIdAsync(userLogin.UserName);
+                var result = await _signInManager.CheckPasswordSignInAsync(user, userLogin.Password, false);
+                if (result.Succeeded)
+                {
+                    var appUser = await _userManger.Users
+                        .FirstOrDefaultAsync(u => u.NormalizedUserName == user.UserName.ToUpper());
+
+                    var userToReturn = _mapper.Map<UserDto>(appUser);
+                   
+                    return Ok(new
+                    {
+                        token = GenerateJWTToken(appUser).Result,
+                        user = appUser
+                    });
+                }
+
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Error {ex.Message }");
+            }
         }
         /// <summary>
         /// Token
@@ -116,7 +142,7 @@ namespace samsung.sedac.alligatormanagerproject.Api.Controllers
             }
 
             var key = new SymmetricSecurityKey(Encoding.ASCII
-                .GetBytes(_config.GetSection("AppSettins:Token").Value));
+                .GetBytes(_config.GetSection("AppSettings:Token").Value));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
@@ -133,16 +159,6 @@ namespace samsung.sedac.alligatormanagerproject.Api.Controllers
             var toker = tokenHandler.CreateToken(tokenDescription);
             return tokenHandler.WriteToken(toker);
         }
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+      
     }
 }
